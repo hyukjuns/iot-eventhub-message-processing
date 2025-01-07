@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventhub-consumer
+spec:
+  selector:
+    matchLabels:
+      app: eventhub-consumer
+  template:
+    metadata:
+      labels:
+        app: eventhub-consumer
+    spec:
+      containers:
+      - name: eventhub-consumer
+        image: hyukjun/eventhub-receiver:1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: BLOB_STORAGE_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_STORAGE_CONNECTION_STRING     
+          - name: BLOB_CONTAINER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_CONTAINER_NAME  
+          - name: EVENT_HUB_CONNECTION_STR
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_CONNECTION_STR
+          - name: EVENT_HUB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_NAME
+
