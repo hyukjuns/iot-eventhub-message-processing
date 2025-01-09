@@ -16,7 +16,6 @@ RUN pip install -r requirements.txt
 ENV PATH="/home/python/.local/bin:$PATH"
 
 # Application File
-COPY eventhub_receive_data-conn-str.py /home/python
+COPY apps/eventhub_receive_data.py /home/python
 
-# Worker Count = 1, run by uvicorn
-CMD ["python", "eventhub_receive_data-conn-str.py"]
+CMD ["python", "eventhub_receive_data.py"]

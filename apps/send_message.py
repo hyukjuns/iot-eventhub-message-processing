@@ -25,7 +25,7 @@ async def main():
 
     async def send_test_message(i):
         print("sending message #" + str(i))
-        msg = Message("Hello World! This is Test Message " + str(i))
+        msg = Message("Test Message " + str(i))
         msg.message_id = uuid.uuid4()
         msg.correlation_id = "correlation-1234"
         msg.custom_properties["tornado-warning"] = "yes"
