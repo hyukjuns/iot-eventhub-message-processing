@@ -6,26 +6,22 @@ from azure.eventhub.aio import EventHubConsumerClient
 from azure.eventhub.extensions.checkpointstoreblobaio import (
     BlobCheckpointStore,
 )
-from azure.identity.aio import DefaultAzureCredential
 
 BLOB_STORAGE_CONNECTION_STRING = os.getenv("BLOB_STORAGE_CONNECTION_STRING")
 BLOB_CONTAINER_NAME = os.getenv("BLOB_CONTAINER_NAME")
 EVENT_HUB_CONNECTION_STR = os.getenv("EVENT_HUB_CONNECTION_STR")
 EVENT_HUB_NAME = os.getenv("EVENT_HUB_NAME")
 
-credential = DefaultAzureCredential()
+logger = logging.getLogger("azure.eventhub")
+logging.basicConfig(level=logging.INFO)
 
 async def on_event(partition_context, event):
-    # Print the event data.
-    print(
+
+    logger.info(
         'Received the event: "{}" from the partition with ID: "{}"'.format(
             event.body_as_str(encoding="UTF-8"), partition_context.partition_id
         )
     )
-    logging.warning("test")
-
-    # Update the checkpoint so that the program doesn't read the events
-    # that it has already read when you run it next time.
     await partition_context.update_checkpoint(event)
 
 async def receive(client):
@@ -49,9 +45,8 @@ async def main():
         checkpoint_store=checkpoint_store
     )
     async with client:
-        # Call the receive method. Read from the beginning of the partition
-        # (starting_position: "-1")
         await receive(client)
         
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

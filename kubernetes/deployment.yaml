@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: eventhub-consumer
-        image: hyukjun/eventhub-receiver:2.0
+        image: hyukjun/eventhub-receiver:4.0
         resources:
           limits:
             memory: "128Mi"
