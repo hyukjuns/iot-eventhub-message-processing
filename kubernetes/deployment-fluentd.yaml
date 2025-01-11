@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventhub-consumer
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app: eventhub-consumer
+  template:
+    metadata:
+      labels:
+        app: eventhub-consumer
+    spec:
+      containers:
+      - name: eventhub-consumer
+        image: hyukjun/eventhub-receiver:4.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: logs
+          mountPath: /var/log/containers
+        env:
+          - name: BLOB_STORAGE_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_STORAGE_CONNECTION_STRING     
+          - name: BLOB_CONTAINER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_CONTAINER_NAME  
+          - name: EVENT_HUB_CONNECTION_STR
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_CONNECTION_STR
+          - name: EVENT_HUB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_NAME
+      - name: fluent-bit
+        image: fluent/fluent-bit:latest
+        args: ["-c", "/fluent-bit/etc/fluent-bit.conf"]
+        ports:
+        - containerPort: 2020      # Prometheus Exporter 포트
+          name: metrics
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: logs
+          mountPath: /var/log/containers
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+      volumes:
+      - name: logs
+        emptyDir: {}                   # 로그 파일을 공유하기 위한 빈 디렉토리
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config      # Fluent Bit 설정 ConfigMap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluent-bit
+  labels:
+    app: fluent-bit
+spec:
+  ports:
+  - name: metrics
+    port: 2020                # Fluent Bit의 Prometheus Exporter 포트
+    targetPort: 2020
+    protocol: TCP
+  selector:
+    app: eventhub-consumer
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fluent-bit
+  namespace: default
+  labels:
+    release: prometheus                # Prometheus Operator의 release 이름
+spec:
+  selector:
+    matchLabels:
+      app: fluent-bit                  # Fluent Bit 서비스와 매칭될 레이블
+  endpoints:
+  - port: metrics                      # Fluent Bit 서비스의 메트릭 포트 이름
+    interval: 5s                      # 스크랩 간격
+    path: /metrics                     # Prometheus Exporter 메트릭 경로
+
