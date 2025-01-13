@@ -24,6 +24,7 @@ oauthlib==3.2.2
 packaging==24.2
 paho-mqtt==1.6.1
 portalocker==2.10.1
+prometheus_client==0.21.1
 propcache==0.2.1
 pycparser==2.22
 PyJWT==2.10.1

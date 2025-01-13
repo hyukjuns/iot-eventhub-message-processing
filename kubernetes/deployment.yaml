@@ -2,7 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: eventhub-consumer
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: eventhub-consumer
@@ -13,11 +16,13 @@ spec:
     spec:
       containers:
       - name: eventhub-consumer
-        image: hyukjun/eventhub-receiver:4.0
+        image: hyukjun/eventhub-receiver:prom3
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
+        ports:
+          - containerPort: 8080
         env:
           - name: BLOB_STORAGE_CONNECTION_STRING
             valueFrom:
@@ -39,4 +44,9 @@ spec:
               secretKeyRef:
                 name: azure-secret
                 key: EVENT_HUB_NAME
+          - name: CONSUMER_GROUP
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: CONSUMER_GROUP
 

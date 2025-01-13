@@ -16,6 +16,6 @@ RUN pip install -r requirements.txt
 ENV PATH="/home/python/.local/bin:$PATH"
 
 # Application File
-COPY apps/eventhub_receive_data.py /home/python
+COPY apps/eventhub_receiver_prom.py /home/python
 
-CMD ["python", "eventhub_receive_data.py"]
+CMD ["python", "eventhub_receiver_prom.py"]
