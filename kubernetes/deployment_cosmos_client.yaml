@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventhub-consumer-cosmos
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventhub-consumer-cosmos
+  template:
+    metadata:
+      labels:
+        app: eventhub-consumer-cosmos
+    spec:
+      containers:
+      - name: eventhub-consumer-cosmos
+        image: hyukjun/eventhub-receiver-cosmos:1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        env:
+          - name: BLOB_STORAGE_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: BLOB_STORAGE_CONNECTION_STRING     
+          - name: BLOB_CONTAINER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: BLOB_CONTAINER_NAME  
+          - name: EVENT_HUB_CONNECTION_STR
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: EVENT_HUB_CONNECTION_STR
+          - name: EVENT_HUB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: EVENT_HUB_NAME
+          - name: CONSUMER_GROUP
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: CONSUMER_GROUP
+          - name: COSMOS_DB_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: COSMOS_DB_CONNECTION_STRING
+          - name: COSMOS_DB_DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: COSMOS_DB_DATABASE_NAME
+          - name: COSMOS_DB_COLLECTION_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret-cosmos
+                key: COSMOS_DB_COLLECTION_NAME
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: eventhub-consumer-cosmos
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: eventhub-consumer-cosmos
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 30
