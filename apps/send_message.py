@@ -32,7 +32,7 @@ async def main():
         msg.custom_properties["tornado-warning"] = "yes"
         msg.content_encoding = "utf-8"
         msg.content_type = "application/json"
-        time.sleep(5)
+        time.sleep(1) # for connected device
         await device_client.send_message(msg)
         # await asyncio.sleep(5)
         print("done sending message #" + str(i))

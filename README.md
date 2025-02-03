@@ -1,5 +1,12 @@
 # IoTHub Sample Workload
+# Create Offset Container
+```
+On the Storage account page in the Azure portal, in the Blob service section, ensure that the following settings are disabled.
 
+Hierarchical namespace
+Blob soft delete
+Versioning
+```
 # Local ENV
 ```bash
 # eventhub
@@ -8,6 +15,7 @@ export BLOB_CONTAINER_NAME=""
 export EVENT_HUB_CONNECTION_STR=""
 export EVENT_HUB_NAME=""
 export CONSUMER_GROUP=""
+export PUBLISH_EVENT_HUB_NAME=""
 
 # provision dps
 export PROVISIONING_HOST=""

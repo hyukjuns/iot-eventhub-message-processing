@@ -20,7 +20,7 @@ spec:
         resources:
           limits:
             memory: "128Mi"
-            cpu: "200m"
+            cpu: "100m"
         env:
           - name: BLOB_STORAGE_CONNECTION_STRING
             valueFrom:
