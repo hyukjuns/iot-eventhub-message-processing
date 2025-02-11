@@ -1,6 +1,7 @@
-import os
+import os,sys
 import asyncio
 import logging
+import time
 
 from azure.eventhub.aio import EventHubConsumerClient
 from azure.eventhub.extensions.checkpointstoreblobaio import (
@@ -13,16 +14,20 @@ EVENT_HUB_CONNECTION_STR = os.getenv("EVENT_HUB_CONNECTION_STR")
 EVENT_HUB_NAME = os.getenv("EVENT_HUB_NAME")
 CONSUMER_GROUP = os.getenv("CONSUMER_GROUP")
 
+handler = logging.StreamHandler(stream=sys.stdout)
+log_fmt = logging.Formatter(fmt="%(asctime)s | %(levelname)s | %(message)s")
+handler.setFormatter(log_fmt)
+logger = logging.getLogger('azure.eventhub')
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+
 logger = logging.getLogger("azure.eventhub")
 logging.basicConfig(level=logging.INFO)
 
 async def on_event(partition_context, event):
 
-    logger.info(
-        'Received the event: "{}" from the partition with ID: "{}"'.format(
-            event.body_as_str(encoding="UTF-8"), partition_context.partition_id
-        )
-    )
+    message = event.body_as_str(encoding="UTF-8")
+    logger.info(f"Received event: {message}, from partition ID: {partition_context.partition_id}")
     await partition_context.update_checkpoint(event)
 
 async def receive(client):
@@ -46,8 +51,10 @@ async def main():
         checkpoint_store=checkpoint_store
     )
     async with client:
+        time.sleep(1)
         await receive(client)
         
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(main())
+    asyncio.run(main())

@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: eventhub-consumer-cosmos
-  annotations:
-    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:
@@ -73,7 +71,7 @@ spec:
     kind: Deployment
     name: eventhub-consumer-cosmos
   minReplicas: 1
-  maxReplicas: 4
+  maxReplicas: 8
   metrics:
   - type: Resource
     resource:

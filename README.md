@@ -9,12 +9,23 @@ Versioning
 ```
 # Local ENV
 ```bash
-# eventhub
+# eventhub_pub_sub.py 
 export BLOB_STORAGE_CONNECTION_STRING=""
 export BLOB_CONTAINER_NAME=""
 export EVENT_HUB_CONNECTION_STR=""
 export EVENT_HUB_NAME=""
 export CONSUMER_GROUP=""
+export PUBLISH_EVENT_HUB_NAME=""
+
+# eventhub_receiver.py
+export BLOB_STORAGE_CONNECTION_STRING=""
+export BLOB_CONTAINER_NAME=""
+export EVENT_HUB_CONNECTION_STR=""
+export EVENT_HUB_NAME=""
+export CONSUMER_GROUP=""
+
+# eventhub_producer.py
+export EVENT_HUB_CONNECTION_STR=""
 export PUBLISH_EVENT_HUB_NAME=""
 
 # provision dps
