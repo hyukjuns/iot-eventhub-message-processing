@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: azure-eventhub
+  namespace: istio-system
+spec:
+  hosts:
+    - "hyukjun.servicebus.windows.net" # Event Hub 네임스페이스
+  ports:
+    - number: 5671
+      name: amqp-tls
+      protocol: TLS # AMQP over TLS를 표현
+    - number: 5672
+      name: amqp
+      protocol: TCP # 일반 AMQP 트래픽
+    - number: 443
+      name: https
+      protocol: TCP # 일반 AMQP 트래픽
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: azure-cosmosdb
+spec:
+  hosts:
+    - "dev-cosmosdb-001.mongo.cosmos.azure.com" # Cosmos DB 계정 이름
+  ports:
+    - number: 10255
+      name: mongo
+      protocol: TCP
+  resolution: DNS
+  location: MESH_EXTERNAL
