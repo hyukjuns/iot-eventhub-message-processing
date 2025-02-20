@@ -1,0 +1,199 @@
+# Resources
+# alertmanager: cpu 0.5 mem 256Mi
+# grafana: cpu 0.5 mem 256Mi
+# prometheusOperator: cpu 0.5 mem 256Mi
+# prometheus: cpu 1, mem 1Gi
+# nodeExporter: cpu 0.1, mem 128Mi
+# kube-state-metrics: cpu 0.1, mem 128Mi
+# Exclude
+kubeControllerManager:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+
+
+# Enable
+kubeProxy:
+  enabled: true
+
+# PrometheusRule
+defaultRules:
+  create: true
+  rules:
+    windows: false
+
+## Alertmanager
+alertmanager:
+  # Default Config
+  config:
+    route:
+      group_by: ['namespace']
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 1m
+      receiver: 'null'
+      routes:
+      - receiver: 'null'
+        matchers:
+          - alertname = "Watchdog"
+        continue: true
+  # Ingress Settings
+  ingress:
+    enabled: true
+    ingressClassName: ingress-nginx-class
+    hosts:
+      - alertmanager.namutest.site
+    paths: 
+      - /
+  
+  # Alertmanager Spec Settings
+  alertmanagerSpec:
+    # # Alertmanager Global Setting Configuration
+    # alertmanagerConfiguration:
+    #   name: global-alertmanager-config
+    # alertmanagerconfig의 namespace가 alertmanager 설정 중 route.routes.matchers에 label로 등록되는것을 방지
+    alertmanagerConfigMatcherStrategy:
+      type: None # Default == OnNamespace
+    # Alertmanager 가 속한 Namespace에 있는 AlertmanagerConfig만 식별
+    alertmanagerConfigSelector: {}
+    alertmanagerConfigNamespaceSelector: {} 
+
+    # Pod and Container Specs
+    replicas: 1
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+    
+    # Stateful Setting
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: azuredisk-ssd-lrs
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+          volumeName: restore-alertmanager-pv # 복구용 PV 이름
+
+
+## Grafana
+grafana:
+  # Global Config
+  defaultDashboardsTimezone: kst
+  adminPassword: admin
+
+  # Ingress Setting
+  ingress:
+    enabled: true
+    ingressClassName: ingress-nginx-class
+    hosts:
+      - grafana.namutest.site
+    paths: 
+      - /
+  
+  # ServiceMonitor Setting
+  serviceMonitor:
+    enabled: true
+    path: "/metrics"
+    scrapeTimeout: 10s
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  # StatefulSet Setting
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: azuredisk-ssd-lrs
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+    volumeName: restore-grafana-pv
+
+## PrometheusOperator
+prometheusOperator:
+   resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+## Promtetheus Server
+prometheus:
+  # Ingress Setting
+  ingress:
+    enabled: true
+    ingressClassName: ingress-nginx-class
+    hosts:
+      - prometheus.namutest.site
+    paths:
+      - /    
+  # Prometheus Spec Setting
+  prometheusSpec:
+    # PrometheusRule Selector -> All Select
+    ruleSelectorNilUsesHelmValues: false
+    # Detect All Service Monitor & Pod Monitor
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    
+    # 메트릭 스크랩 scrapeTimeout > scrapeInterval
+    scrapeInterval: "15s"
+    evaluationInterval: "15s"
+    scrapeTimeout: "10s"
+    retention:  10d 
+    retentionSize: "8GiB"
+    
+    # Pod and Contaienr Spec Settings
+    replicas: 1
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    
+    # StatefulSet Settings
+    storageSpec: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: azuredisk-ssd-lrs # 미리 단들어둔 스토리지클래스
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+          volumeName: restore-prometheus-pv # 복구용 PV 이름
+
+## Node Exporter
+nodeExporter:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+## Kube State Metrics
+kube-state-metrics:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi

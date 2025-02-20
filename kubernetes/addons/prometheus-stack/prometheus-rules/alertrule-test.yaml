@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: alertrule-test
+  namespace: monitoring
+  labels:
+    for: test
+    team: infra
+spec:
+  groups:
+    - name: ./test-alerts-002
+      rules:
+      - alert: TestAlert-002
+        expr: kube_pod_container_status_waiting > 0
+        for: 10s
+        labels:
+          # namespace: dev
+          severity: critical
+        annotations:
+          summary: "Event: {{ $labels.pod}} Pod is waiting to Schedule, Namespace: {{ $labels.namespace }}, Container: {{ $labels.container }}"
+          description: "labels: {{ $labels }}"

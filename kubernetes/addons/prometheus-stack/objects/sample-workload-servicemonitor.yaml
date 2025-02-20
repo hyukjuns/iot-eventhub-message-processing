@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-workload
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: external-workload
+  template:
+    metadata:
+      labels:
+        app: external-workload
+    spec:
+      containers:
+      # 메트릭 노출
+      - name: nginx-metric-exporter
+        image: 'nginx/nginx-prometheus-exporter:0.10.0'
+        args:
+          - '-nginx.scrape-uri=http://localhost/metrics' # stub_status 에서 설정한 경로
+        ports:
+        - containerPort: 9113
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+      # NGINX Application
+      - name: external-workload
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/bash"]
+        args: ["-c", "echo \"You came in through an external ingress controller \n Hello from $(hostname)!\" > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+        # 볼륨으로 ConfigMap 마운트 (Stub Status 설정파일)
+        volumeMounts:
+          - name: volume-nginx-metrics-conf
+            mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: volume-nginx-metrics-conf
+          configMap:
+            name: nginx-metrics-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-workload-svc
+  labels:
+    app: external-workload # 서비스 모니터에서 Selector 설정에 사용됨
+spec:
+  selector:
+    app: external-workload
+  ports:
+  - name: web
+    port: 8080
+    targetPort: 80
+  - name: metrics # 서비스 모니터에서 바라보는 엔드포인트, Endpoints 설정에 사용됨
+    port: 9113
+    targetPort: 9113
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: external-workload
+  labels:
+    software: nginx
+spec:
+  selector:
+    matchLabels:
+      app: external-workload
+  endpoints:
+  - port: metrics

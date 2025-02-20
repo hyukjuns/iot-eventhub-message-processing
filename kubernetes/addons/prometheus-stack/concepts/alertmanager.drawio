@@ -1,0 +1,132 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.8.0">
+  <diagram name="페이지-1" id="imuQKAUCu5dubq_rODLa">
+    <mxGraphModel dx="989" dy="1678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-2" value="Secret&lt;div&gt;Volume&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="220" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.028;entryY=0.585;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" target="gS8YIqSY_J7xMPx6njZp-35">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="320" y="200.0344827586207" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="260" y="200" />
+              <mxPoint x="260" y="267" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-11" target="gS8YIqSY_J7xMPx6njZp-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="579.9999999999998" y="40.0344827586207" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="410" y="40" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="459.9999999999998" y="40.0344827586207" as="sourcePoint" />
+            <mxPoint x="380.0344827586207" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-7" value="AlertmanagerConfig" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="-150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-8" value="PrometheusRule" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="-150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-11" target="gS8YIqSY_J7xMPx6njZp-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-11" value="Prometheus&lt;div&gt;Operator&lt;/div&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-12" target="gS8YIqSY_J7xMPx6njZp-23">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="644" y="270" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="520" y="210" />
+              <mxPoint x="520" y="290" />
+              <mxPoint x="644" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-12" value="Alertmanager" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-13" target="gS8YIqSY_J7xMPx6njZp-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-13" value="Prometheus" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-16" target="gS8YIqSY_J7xMPx6njZp-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-16" target="gS8YIqSY_J7xMPx6njZp-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-16" value="Helm Values" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.546;entryY=1.028;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gS8YIqSY_J7xMPx6njZp-11" target="gS8YIqSY_J7xMPx6njZp-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="606" y="40" />
+              <mxPoint x="606" y="-40" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-20" value="&lt;div&gt;Watch&lt;/div&gt;Alert Rule" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="600" y="-5" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-21" value="Watch&lt;div&gt;Alert Config&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="324" y="-15" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-22" value="Send Alert Context" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="460" y="170" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-23" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Slack_colored_svg-128.png" vertex="1" parent="1">
+          <mxGeometry x="620" y="370" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-25" value="Send Alert" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="640" y="300" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-27" value="label&lt;div&gt;- key: value&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="530" y="140" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-28" value="Update at&lt;div&gt;/etc/alertmanager/config_out/alertmanager.env.yaml&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="270" y="85" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-29" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Update at&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;/etc/prometheus/rules/prometheus-prometheus-kube-prometheus-prometheus-rulefiles-0&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="660" y="85" width="490" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-32" value="Alertmanager" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="220" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-33" value="Config Reloader" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="220" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-34" value="EmptyDir&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&amp;nbsp;/etc/alertmanager/config_out from config-out (rw)&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="350" y="250" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-35" value="Secret&lt;div&gt;Volume&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;text-wrap: nowrap; background-color: initial;&quot;&gt;generated)&lt;/span&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="170" y="220" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-5" value="&lt;div&gt;Default&lt;/div&gt;alertmanager.yaml" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="310" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-26" value="matchers&lt;div&gt;- key: value&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="440" y="140" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-41" value="Create" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="160" y="130" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gS8YIqSY_J7xMPx6njZp-42" value="&lt;div&gt;/etc/alertmanager/config from config-volume (ro)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="140" y="170" width="280" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

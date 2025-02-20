@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {          
+      "EventHubNamespace": {
+        "value": "testevtew"
+      },
+      "EventHubName":{
+        "value": "test-conn-evt01"
+      },
+      "CheckpointAccountName":{
+        "value": "testoffsetsac001"
+      },
+      "CheckpointContainerName":{
+        "value": "offset-container"
+      },
+      "CustomMetricInterval":{
+        "value": "10000"
+      },
+      "managedIdentityName":{
+        "value": "mycustomidentity"      
+      },
+      "AcaEnvName":{
+        "value": "hyukjundevaca001"
+      },
+      "EmitterImage":{
+        "value": "azure-samples/eventhub-custom-metrics-emitter:latest"
+      },
+      "ContainerAppName":{
+        "value": "eh-lag-emitter"
+      }
+    }
+  }

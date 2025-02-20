@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: alert-test-pod
+  name: alert-test-pod
+spec:
+  containers:
+  - image: busybox
+    name: alert-test-pod
+    # 스케쥴 실패 처리
+    resources:
+      limits:
+        cpu: 5
+        memory: 512Gi

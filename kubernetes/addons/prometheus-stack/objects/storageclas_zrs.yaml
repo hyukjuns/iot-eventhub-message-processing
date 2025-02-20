@@ -1,0 +1,11 @@
+# For Prometheus
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azuredisk-ssd-zrs
+provisioner: disk.csi.azure.com
+parameters:
+  skuname: StandardSSD_ZRS
+allowVolumeExpansion: true 
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer

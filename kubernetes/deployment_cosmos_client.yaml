@@ -17,8 +17,8 @@ spec:
         image: hyukjun/eventhub-receiver-cosmos:1.0
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: "512Mi"
+            cpu: "500m"
         env:
           - name: BLOB_STORAGE_CONNECTION_STRING
             valueFrom:
@@ -78,4 +78,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 30
+        averageUtilization: 60

@@ -69,6 +69,9 @@ export COSMOS_DB_COLLECTION_NAME=""
     --from-literal COSMOS_DB_DATABASE_NAME="COMSMOSDB" \
     --from-literal COSMOS_DB_COLLECTION_NAME="COMSMOSCOLLECTION"
 ```
+## Eventhub Lag Monitoring
+- Eventhub Lag Value = Latest Offset - Current OFfset
+- Azure Monitor 집계방식은 AVG 사용해야함 (Count는 메트릭 측정값이 몇개나 수집되었는지만 확인 하므로 측정값의 합인 Sum을 Count로 나눈 AVG 만 사용할 수 있음)
 
 # Ref
 ```bash

@@ -1,0 +1,244 @@
+# Exclude - AKS Managed Component
+kubeControllerManager:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+
+# Include - Kube-Proxy
+# AKS 환경에 맞게 service.selector 설정
+kubeProxy:
+  enabled: true
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+    ipDualStack:
+      enabled: false
+      ipFamilies: ["IPv6", "IPv4"]
+      ipFamilyPolicy: "PreferDualStack"
+    selector:
+      component: kube-proxy
+
+# PrometheusRule
+defaultRules:
+  create: true
+  rules:
+    windows: false
+
+# Alertmanager
+alertmanager:
+  # Default Config
+  config:
+    route:
+      group_by: ['namespace']
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 1m
+      receiver: 'null'
+      routes:
+      - receiver: 'null'
+        matchers:
+          - alertname = "Watchdog"
+        continue: true
+  # Ingress Service
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: prometheus-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    ingressClassName: ingress-nginx-class
+    hosts:
+      - iotalertmanager.namutest.site
+    paths: 
+      - /
+  
+  # Alertmanager Specs
+  alertmanagerSpec:
+    
+    # 글로벌 AlertmanagerConfig 설정 시 사용
+    # alertmanagerConfiguration:
+    #   name: global-alertmanager-config
+    
+    # alertmanagerconfig의 namespace가 alertmanager 설정 중 route.routes.matchers에 label로 등록되는것을 방지
+    alertmanagerConfigMatcherStrategy:
+      type: None # OnNamespace
+    
+    # Alertmanager 가 속한 Namespace에 있는 AlertmanagerConfig는 Label에 상관 없이 모두 식별
+    alertmanagerConfigSelector: {}
+    alertmanagerConfigNamespaceSelector: {} 
+
+    # Replicas
+    replicas: 1
+
+    # Resource Requests/Limits
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+    
+    # Stateful Setting
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: azuredisk-ssd-lrs
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+          # volumeName: restore-alertmanager-pv # 복구용 PV 이름
+
+# Grafana
+grafana:
+  # Global Config
+  defaultDashboardsTimezone: kst
+  adminPassword: admin
+
+  # Ingress Service
+  ingress:
+    enabled: true
+    ingressClassName: ingress-nginx-class
+    annotations:
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: prometheus-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    hosts:
+      - iotgrafana.namutest.site
+    paths:
+      - /
+  
+  # ServiceMonitor Setting
+  serviceMonitor:
+    enabled: true
+    path: "/metrics"
+    scrapeTimeout: 10s
+
+  # Resource Requests/Limits
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  # StatefulSet Setting
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: azuredisk-ssd-lrs
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+    # volumeName: restore-grafana-pv
+
+# PrometheusOperator
+prometheusOperator:
+   resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+# Promtetheus Server
+prometheus:
+  # Ingress Service
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: prometheus-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    ingressClassName: ingress-nginx-class
+    hosts:
+      - iotprometheus.namutest.site
+    paths:
+      - /
+  # Prometheus Specs
+  prometheusSpec:
+    logLevel: info # debug
+    
+    # 메트릭 수집 설정
+    scrapeInterval: "15s"
+    evaluationInterval: "15s"
+    scrapeTimeout: "10s"
+    retention:  10d 
+    retentionSize: "8GiB"
+
+    # Selector 설정 공통 사항
+    # xxxNilUsesHelmValues: true 로 설정시 xxxSelector에 matchLabel이 설정됨 (기본값: release: RELEASE)
+    # Chart Template Path: kube-prometheus-stack/templates/prometheus/prometheus.yaml
+    # (Example)
+    # serviceMonitorSelector:
+    #   matchLabels:
+    #     release: {{ $.Release.Name | quote }}
+
+    # Namespace / Label 상관 없이 클러스터내 모든 PrometheusRule 식별
+    ruleSelectorNilUsesHelmValues: false
+    ruleNamespaceSelector: {}
+    ruleSelector: {}
+
+    # Namespace / Label 상관 없이 클러스터내 모든 Pod Monitor 식별
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorNamespaceSelector: {}
+    podMonitorSelector: {}
+
+    # Namespace / Label 상관 없이 클러스터내 모든 Service Monitor 식별
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+    
+    
+    # Replicas
+    replicas: 1
+
+    # Resource Requests / Limits
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    
+    # StatefulSet Settings
+    storageSpec: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: azuredisk-ssd-lrs # 미리 단들어둔 스토리지클래스
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+          # volumeName: restore-prometheus-pv # 복구용 PV 이름
+
+# Node Exporter
+# Resource Requests / Limits
+nodeExporter:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Kube State Metrics
+# Resource Requests / Limits
+kube-state-metrics:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
