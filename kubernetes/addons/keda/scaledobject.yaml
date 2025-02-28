@@ -1,0 +1,42 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: eventhub-consumer-scaledobject
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: eventhub-consumer
+  maxReplicaCount: 3
+  minReplicaCount: 1
+  fallback:
+    replicas: 1 # fallback 모드시 1 replicas 유지
+    failureThreshold: 30 # 30s 동안 스케일러 비정상시 fallback모드 진입
+  triggers:
+  - type: azure-eventhub
+    metadata:
+      # Required
+      storageConnectionFromEnv : BLOB_STORAGE_CONNECTION_STRING
+      # Required if using Pod Identity
+      connectionFromEnv: EVENT_HUB_CONNECTION_STR
+      eventHubName: d2c
+      # Option
+      consumerGroup: devd2c # default: $Default
+      unprocessedEventThreshold: "10" # default 64 events.
+      blobContainer: "d2c-offset"
+      checkpointStrategy: blobMetadata
+    authenticationRef:
+      name: eventhub-consumer-auth
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: eventhub-consumer-auth
+  namespace: default
+spec:
+  secretTargetRef:
+    - parameter: connectionFromEnv
+      name: azure-secret
+      key: EVENT_HUB_CONNECTION_STR
+    - parameter: storageConnectionFromEnv
+      name: azure-secret
+      key: BLOB_STORAGE_CONNECTION_STRING

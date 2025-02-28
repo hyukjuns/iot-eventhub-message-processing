@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keda-svc-monitor
+  namespace: keda
+spec:
+  selector:
+    matchLabels:
+      app: keda-operator-metrics-apiserver
+  namespaceSelector:
+    matchNames:
+      - keda
+  endpoints:
+    - port: metrics
+      interval: 15s

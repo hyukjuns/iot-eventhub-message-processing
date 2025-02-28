@@ -1,0 +1,15 @@
+prometheus:
+  metricServer:
+    enabled: true
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: true
+  operator:
+    enabled: true
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: true
+  webhooks:
+    enabled: true
+    serviceMonitor:
+      enabled: true
