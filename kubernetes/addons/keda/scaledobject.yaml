@@ -1,41 +1,65 @@
+# 이벤트허브 스케일러 오브젝트트
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: eventhub-consumer-scaledobject
   namespace: default
 spec:
+  # 스케일링 대상 (디플로이먼트이름)
   scaleTargetRef:
     name: eventhub-consumer
-  pollingInterval: 10
-  cooldownPeriod: 60
-  minReplicaCount: 1
-  maxReplicaCount: 5
+  pollingInterval: 10 # 체크 주기
+  minReplicaCount: 1 # 최소 파드
+  maxReplicaCount: 7 # 최대 파드 (Max 값이 파티션 크기 이상이어도, 실제 파티션 개수보다 크게 확장되지 않음)
+  # KEDA 스케일러 오류 시 동작
+  fallback:                                         
+    failureThreshold: 3                              
+    replicas: 1
+  # 스케일링 상세 설정 (옵션)
+  advanced:
+    restoreToOriginalReplicaCount: true # KEDA HPA 제거 시 원본 Replica로 복귀귀
+    horizontalPodAutoscalerConfig: # KEDA HPA 스케일링 정책 구성                 
+      behavior:
+        # 임계치 초과시 1분마다 1개씩 파드 증설
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+          - type: Pods
+            value: 1
+            periodSeconds: 60
+        # 안정화 기간 300초 이후 60초 마다 1개씩 파드 스케일 다운
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+          - type: Pods
+            value: 1
+            periodSeconds: 60
+  # 데이터 소스 설정정
   triggers:
-  - type: azure-eventhub
+  - type: azure-eventhub # 예약어
     metadata:
-      # Required
-      storageConnectionFromEnv : BLOB_STORAGE_CONNECTION_STRING
-      # Required if using Pod Identity
-      connectionFromEnv: EVENT_HUB_CONNECTION_STR
-      eventHubName: d2c
-      # Option
-      consumerGroup: devd2c # default: $Default
-      unprocessedEventThreshold: "10" # default 64 events.
-      blobContainer: "d2c-offset"
-      checkpointStrategy: blobMetadata
+      storageConnectionFromEnv : BLOB_STORAGE_CONNECTION_STRING # Secret Key, 스토리지 커넥션 스트링
+      connectionFromEnv: EVENT_HUB_CONNECTION_STR # Secret Key, 이벤트허브 커넥션 스트링
+      eventHubName: d2c # 이벤트허브 이름
+      consumerGroup: devd2c # 컨슈머그룹 이름
+      unprocessedEventThreshold: "10" # 임계 메시지 개수, default 64 events
+      blobContainer: "d2c-offset" # 블롬 컨테이너 이름 (오프셋 저장용)
+      checkpointStrategy: blobMetadata # 필수 지정 값, Blob 사용 명시
     authenticationRef:
-      name: eventhub-consumer-auth
+      name: eventhub-consumer-auth # TriggerAuthentication 연결
 ---
+# Azure 인증 구성 (커넥션 스트링)
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
 metadata:
   name: eventhub-consumer-auth
   namespace: default
 spec:
+  # 시크릿 참조
   secretTargetRef:
-    - parameter: connectionFromEnv
-      name: azure-secret
-      key: EVENT_HUB_CONNECTION_STR
-    - parameter: storageConnectionFromEnv
-      name: azure-secret
-      key: BLOB_STORAGE_CONNECTION_STRING
+    - parameter: connectionFromEnv # ScaledObject.spec.triggers[].metadata.connectionFromEnv
+      name: azure-secret # Secret Name
+      key: EVENT_HUB_CONNECTION_STR # Secret Key
+    - parameter: storageConnectionFromEnv # ScaledObject.spec.triggers[].metadata.storageConnectionFromEnv
+      name: azure-secret # Secret Name
+      key: BLOB_STORAGE_CONNECTION_STRING # Secret Key
