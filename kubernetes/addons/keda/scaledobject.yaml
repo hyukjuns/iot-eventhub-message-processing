@@ -57,9 +57,9 @@ metadata:
 spec:
   # 시크릿 참조
   secretTargetRef:
-    - parameter: connectionFromEnv # ScaledObject.spec.triggers[].metadata.connectionFromEnv
+    - parameter: connection # ScaledObject.spec.triggers[].metadata.connectionFromEnv
       name: azure-secret # Secret Name
       key: EVENT_HUB_CONNECTION_STR # Secret Key
-    - parameter: storageConnectionFromEnv # ScaledObject.spec.triggers[].metadata.storageConnectionFromEnv
+    - parameter: storageConnection # ScaledObject.spec.triggers[].metadata.storageConnectionFromEnv
       name: azure-secret # Secret Name
       key: BLOB_STORAGE_CONNECTION_STRING # Secret Key
