@@ -1,0 +1,60 @@
+# Resources
+resources:
+  # -- Manage [resource request & limits] of KEDA operator pod
+  operator:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  # -- Manage [resource request & limits] of KEDA metrics apiserver pod
+  metricServer:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  # -- Manage [resource request & limits] of KEDA admission webhooks pod
+  webhooks:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+
+# Toleration
+tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "monitoring"
+    effect: "NoSchedule"
+# Node Affinity
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: mgmt
+          operator: In
+          values:
+          - monitoring
+
+# Integ Prometheus
+prometheus:
+  metricServer:
+    enabled: true
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: true
+  operator:
+    enabled: true
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: true
+  webhooks:
+    enabled: true
+    serviceMonitor:
+      enabled: true

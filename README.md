@@ -18,7 +18,7 @@ export EVENT_HUB_CONNECTION_STR=""
 export EVENT_HUB_NAME=""
 export CONSUMER_GROUP=""
 export PUBLISH_EVENT_HUB_NAME=""
-
+export APPLICATION_INSIGHTS_CONNECTION_STRING=""
 # eventhub_receiver.py
 export BLOB_STORAGE_CONNECTION_STRING=""
 export BLOB_CONTAINER_NAME=""
@@ -87,3 +87,9 @@ Eventhub의 처리되지 않은 메시지 수 기반 Pod 스케일링
 # Storage Account Connection String Scheme
 DefaultEndpointsProtocol=https;AccountName=STORAGE;AccountKey=KEY
 ```
+
+IotHub SDK Python
+https://github.com/Azure/azure-iot-sdk-python
+
+IoTHub API Version Change logs
+https://learn.microsoft.com/en-us/azure/templates/microsoft.devices/change-log/iothubs

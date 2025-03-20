@@ -1,3 +1,5 @@
+# Except Alertmanager
+
 # Exclude - AKS Managed Component
 kubeControllerManager:
   enabled: false
@@ -26,76 +28,11 @@ defaultRules:
   create: true
   rules:
     windows: false
+    alertmanager: false
 
 # Alertmanager
 alertmanager:
-  # Default Config
-  config:
-    route:
-      group_by: ['namespace']
-      group_wait: 10s
-      group_interval: 30s
-      repeat_interval: 1m
-      receiver: 'null'
-      routes:
-      - receiver: 'null'
-        matchers:
-          - alertname = "Watchdog"
-        continue: true
-  service:
-    type: LoadBalancer
-  
-  # Alertmanager Specs
-  alertmanagerSpec:
-    
-    # 글로벌 AlertmanagerConfig 설정 시 사용
-    # alertmanagerConfiguration:
-    #   name: global-alertmanager-config
-    
-    # alertmanagerconfig의 namespace가 alertmanager 설정 중 route.routes.matchers에 label로 등록되는것을 방지
-    alertmanagerConfigMatcherStrategy:
-      type: None # OnNamespace
-    
-    # Alertmanager 가 속한 Namespace에 있는 AlertmanagerConfig는 Label에 상관 없이 모두 식별
-    alertmanagerConfigSelector: {}
-    alertmanagerConfigNamespaceSelector: {} 
-
-    # Replicas
-    replicas: 1
-    # node affinity
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: mgmt
-              operator: In
-              values:
-              - monitoring
-    tolerations:
-      - key: "dedicated"
-        operator: "Equal"
-        value: "monitoring"
-        effect: "NoSchedule"
-    # Resource Requests/Limits
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-      requests:
-        cpu: 500m
-        memory: 256Mi
-    
-    # Stateful Setting
-    storage:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: azuredisk-ssd-lrs
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 8Gi
-          # volumeName: restore-alertmanager-pv # 복구용 PV 이름
+  enabled: false
 
 # Grafana
 grafana:
@@ -156,26 +93,12 @@ prometheusOperator:
         operator: "Equal"
         value: "monitoring"
         effect: "NoSchedule"
-  #     resources:
-  #       limits:
-  #         cpu: 200m
-  #         memory: 256Mi
-  #       requests:
-  #         cpu: 100m
-  #         memory: 128Mi
     patch:
       tolerations:
       - key: "dedicated"
         operator: "Equal"
         value: "monitoring"
         effect: "NoSchedule"
-  #     resources:
-  #       limits:
-  #         cpu: 200m
-  #         memory: 256Mi
-  #       requests:
-  #         cpu: 100m
-  #         memory: 128Mi
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -212,14 +135,6 @@ prometheus:
     scrapeTimeout: "10s"
     retention:  7d 
     retentionSize: "8GiB"
-
-    # Selector 설정 공통 사항
-    # xxxNilUsesHelmValues: true 로 설정시 xxxSelector에 matchLabel이 설정됨 (기본값: release: RELEASE)
-    # Chart Template Path: kube-prometheus-stack/templates/prometheus/prometheus.yaml
-    # (Example)
-    # serviceMonitorSelector:
-    #   matchLabels:
-    #     release: {{ $.Release.Name | quote }}
 
     # Namespace / Label 상관 없이 클러스터내 모든 PrometheusRule 식별
     ruleSelectorNilUsesHelmValues: false
@@ -290,7 +205,6 @@ nodeExporter:
       memory: 128Mi
 
 # Kube State Metrics
-# Resource Requests / Limits
 # node affinity
 kube-state-metrics:
   affinity:
@@ -307,6 +221,7 @@ kube-state-metrics:
       operator: "Equal"
       value: "monitoring"
       effect: "NoSchedule"
+  # Resource Requests / Limits
   resources:
     limits:
       cpu: 200m
