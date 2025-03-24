@@ -1,0 +1,35 @@
+apiVersion: azmonitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keda-operator-service-monitor
+  namespace: keda
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: keda-operator
+  endpoints:
+  - port: metrics
+---
+apiVersion: azmonitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keda-metrics-apiserver-service-monitor
+  namespace: keda
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: keda-operator-metrics-apiserver
+  endpoints:
+  - port: metrics
+---
+apiVersion: azmonitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keda-admission-webhooks-service-monitor
+  namespace: keda
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: keda-admission-webhooks
+  endpoints:
+  - port: metrics
