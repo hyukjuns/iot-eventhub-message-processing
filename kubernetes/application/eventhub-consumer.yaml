@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventhub-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventhub-consumer
+  template:
+    metadata:
+      labels:
+        app: eventhub-consumer
+    spec:
+      containers:
+      - name: eventhub-consumer
+        image: hyukjun/eventhub-receiver:6.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 8080
+        env:
+          - name: BLOB_STORAGE_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_STORAGE_CONNECTION_STRING     
+          - name: BLOB_CONTAINER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: BLOB_CONTAINER_NAME  
+          - name: EVENT_HUB_CONNECTION_STR
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_CONNECTION_STR
+          - name: EVENT_HUB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: EVENT_HUB_NAME
+          - name: CONSUMER_GROUP
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: CONSUMER_GROUP
+          - name: PUBLISH_EVENT_HUB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-secret
+                key: PUBLISH_EVENT_HUB_NAME
+
+# ---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: eventhub-consumer
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: eventhub-consumer
+#   minReplicas: 1
+#   maxReplicas: 8
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: cpu
+#       target:
+#         type: Utilization
+#         averageUtilization: 60

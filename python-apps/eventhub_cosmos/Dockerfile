@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Container User
 # -m: create home -s: login shell, Group is auto created
