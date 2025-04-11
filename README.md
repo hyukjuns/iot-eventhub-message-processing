@@ -1,4 +1,14 @@
-# IoTHub and Eventhub Sample Workload (Python and Go)
+# Eventhub Pub/Sub Application in Azure Kubernetes Service
+- Eventhub Producer/Consumer Application 빌드 및 AKS 배포
+- Prometheus, KEDA 를 사용한 Pub/Sub 모니터링 환경 구축
+- Azure IoT SDK Sample Workload 를 사용한 부하 생성
+## Managed Prometheus (Prometheus Agent Mode)
+![](./diagram/managed_prom.svg)
+## KEDA (EventHub Scaler)
+![](./diagram/keda.svg)
+## EventHub Pub/Sub Application
+![](./diagram/demo.svg)
+
 
 ## Setting
 ### Create Offset Container
