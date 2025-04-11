@@ -1,4 +1,13 @@
 # Istio
+- Istio 활용한 Eventhub Client Application Network Map 구현 목적 (Istio Minial Profile, Telemetry Object (for Eventhub))
+
+## 테스트 결과 (제한사항)
+- 클러스터 외부 리소스인 Eventhub,CosmosDB에 대한 시각화 제한으로 인해 철회
+- Eventhub Entitiy는 EventhubNamespace/<Entity> 형태로 Path 기반 URL 로 표현해야 하지만, Istio를 사용하여 Eventhub의 TCP 트래픽 표현할 경우 Path 기반 Endpoint를 표현할 수 없음
+- 즉, 1개의 Eventhub Namespace 내 각각의 Eventhub Entity를 표현할 수 없음
+- CosmosDB 도 마찬가지로 데이터베이스 내부 컬렉션 별로 트래픽을 분류할 수 없음
+
+  ![](../../diagram/istio.png)
 
 ## Installation Step
 

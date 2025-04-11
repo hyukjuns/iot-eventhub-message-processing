@@ -89,7 +89,3 @@ helm install keda kedacore/keda -n keda -f VALUEFILE
     ```
 2.  ServiceMonitor 배포 하여 Metrics 서비스 디스커버리 구성
 *Managed Prometheus 사용시 ServiceMonitor의 apiVersion은 `azmonitoring.coreos.com/v1`
-
-## Managed Prometheus and Managed Grafana
-- Prometheus Agent 방식으로 Azure Monitor Workspace에 프로메테우스 메트릭을 Remote Write 함
-- 즉, 한곳에서 멀티 클러스터의 데이터를 조회할 수 있음
