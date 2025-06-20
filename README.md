@@ -42,7 +42,10 @@ Path: [./eventhub-lag/](./eventhub-lag/)
     ```bash
     DefaultEndpointsProtocol=https;AccountName=STORAGE;AccountKey=KEY
     ```
+- [Azure SDK for Python](https://github.com/Azure/azure-sdk-for-python/tree/main)
 
 - [IotHub SDK Python](https://github.com/Azure/azure-iot-sdk-python)
 
 - [IoTHub API Version Change logs](https://learn.microsoft.com/en-us/azure/templates/microsoft.devices/change-log/iothubs)
+
+- [Azure Event Hubs client library for Python](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventhub/azure-eventhub)

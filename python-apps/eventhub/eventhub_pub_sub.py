@@ -48,7 +48,7 @@ async def process_event(producer_client, partition_context, event):
     while retry_count < max_retries:
         try:
             message = event.body_as_str(encoding="UTF-8")
-            # 송신메세지 만들기기
+            # 송신메세지 만들기
             processed_dummy_message = f"processed_dummy_message - {message}"
             logger.info(f"Received event: {message}, from partition ID: {partition_context.partition_id}")
             # 메시지 전송 호출
